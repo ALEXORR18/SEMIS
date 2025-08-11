@@ -1,7 +1,7 @@
 // api1.js
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = 5000;
 
 // Endpoint 1: /check
 app.get('/check', (req, res) => {
