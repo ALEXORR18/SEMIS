@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Grupo 11 – Seminario de Sistemas 1 A</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; }
+    button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Grupo 11 – Seminario de Sistemas 1 A</h1>
+  <button onclick="fetchData()">Obtener JSON</button>
+  <pre id="output"></pre>
+
+  <script>
+    async function fetchData() {
+      const output = document.getElementById("output");
+      output.textContent = "Cargando...";
+
+      try {
+        const res = await fetch("http://52.139.24.226/get-data");
+        if (!res.ok) {
+          throw new Error("Error al obtener datos: " + res.status);
+        }
+        const data = await res.json();
+        // Muestra el JSON formateado
+        output.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        output.textContent = "Error: " + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
+
+
