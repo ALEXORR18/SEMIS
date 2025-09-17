@@ -1,0 +1,23 @@
+# === Node.js ===
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# === Python ===
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.env
+.venv/
+env/
+venv/
+
+# === Archivos temporales del sistema ===
+.DS_Store
+Thumbs.db
+
+# === Entornos y configuraciones ===
+*.env
+.env.*
