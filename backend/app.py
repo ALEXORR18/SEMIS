@@ -139,12 +139,14 @@ def login():
     data = request.json
     username = data.get("username")
     password = data.get("password")
+    #print("Intento de login para usuario:", username)
+    #print("Contraseña recibida:", password)
 
     if not (username and password):
         return jsonify({"error": "Faltan credenciales"}), 400
 
     hashed = hashlib.md5(password.encode()).hexdigest()
-
+    #print("Contraseña recibida:", hashed)
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     cursor.execute(
@@ -208,6 +210,35 @@ def list_recipes():
     cursor.close()
     conn.close()
     return jsonify(rows), 200
+
+@app.route("/my-recipes/<int:user_id>", methods=["GET"])
+def list_my_recipes(user_id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT r.id_receta, r.titulo, r.descripcion, r.ingredientes, r.instrucciones,
+               r.fecha_creacion
+        FROM Recetas r
+        WHERE r.id_usuario = %s
+        ORDER BY r.fecha_creacion DESC
+    """, (user_id,))
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    # Normalizar campos para que coincidan con el front
+    normalized = []
+    for r in rows:
+        normalized.append({
+            "id": r["id_receta"],
+            "title": r["titulo"],
+            "description": r["descripcion"],
+            "ingredients": r["ingredientes"],
+            "steps": r["instrucciones"],
+            "createdAt": r["fecha_creacion"]
+        })
+
+    return jsonify(normalized), 200
 
 # ------------------------------
 # FAVORITOS (guardar y listar)
